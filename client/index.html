@@ -12,18 +12,24 @@
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  
+
   <script>
-  var socket = io();
-  socket.on('todo added to server', function(msg) {
-  var $toastContent = $('<span>New ToDo Added</span>');
-  Materialize.toast($toastContent, 5000);
-  //alert('A new todo is added');
-  $.getJSON("todos.json", function (toDoObjects) {
-  main(toDoObjects);
-  });
-  $("main .content").slideDown();
-  });
+    var socket = io();
+    socket.on('todo added to server', function(msg) {
+      
+      var $toastContent = $('<span>New ToDo Added</span>');
+      Materialize.toast($toastContent, 5000);
+      
+      $.getJSON("todos.json", function (toDoObjects) {
+        main(toDoObjects);
+      });
+      
+      $("main .content").slideDown();
+    });
   </script>
+  
+
   <body>
     <header>
       <div class="container">

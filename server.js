@@ -2,7 +2,20 @@ var express = require("express"),
     mongoose = require("mongoose"),
     app = express();
 var http = require('http').Server(app);
+
+//SOCKET.IO CODE
 var io = require('socket.io')(http);
+
+io.on('connection', function(socket) {
+    console.log('a user connected');
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+    socket.on('todo added', function(msg) {
+        console.log('Message: ' + msg);
+        io.emit('todo added to server', msg);
+    });
+});
 
 app.use(express.static(__dirname + "/client"));
 app.use(express.bodyParser());
@@ -18,16 +31,6 @@ var ToDoSchema = mongoose.Schema({
 
 var ToDo = mongoose.model("ToDo", ToDoSchema);
 
-io.on('connection', function(socket) {
-    console.log('a user connected');
-    socket.on('disconnect', function() {
-        console.log('user disconnected');
-    });
-    socket.on('todo added', function(msg) {
-        console.log('Message: ' + msg);
-        io.emit('todo added to server', msg);
-    });
-});
 
 app.get("/todos.json", function(req, res) {
     ToDo.find({}, function(err, toDos) {
